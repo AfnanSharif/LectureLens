@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ pack.title }} · LectureLens</title><link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}"></head>
+<body><main><nav class="top"><a class="logo" href="/">LECTURE<span>LENS</span></a><span class="pill">{{ pack.word_count }} source words · {{ pack.estimated_read_minutes }} min brief</span></nav>
+  <header class="result-head"><p class="eyebrow">YOUR LEARNING PACK</p><h1>{{ pack.title }}</h1><div class="chips">{% for concept in pack.key_concepts %}<span>{{ concept }}</span>{% endfor %}</div></header>
+  <section class="result-grid"><article class="card"><p class="step">01 · BRIEF</p><h2>Summary</h2><p class="summary">{{ pack.summary }}</p></article>
+    <article class="card"><p class="step">02 · NOTES</p><h2>Study notes</h2><ol class="notes">{% for note in pack.study_notes %}<li>{{ note }}</li>{% endfor %}</ol></article></section>
+  <section class="card quiz"><p class="step">03 · ACTIVE RECALL</p><h2>Check your understanding</h2><form id="quiz-form">
+    {% for question in pack.quiz %}<fieldset><legend><span>{{ loop.index|string|upper }}</span>{{ question.prompt }}</legend>{% for choice in question.choices %}<label class="choice"><input type="radio" name="{{ question.id }}" value="{{ loop.index0 }}">{{ choice }}</label>{% endfor %}<p class="explanation" id="ex-{{ question.id }}"></p></fieldset>{% endfor %}
+    <button type="submit">Grade my answers</button><div id="score"></div></form></section>
+  <section class="card feedback"><p class="step">04 · FEEDBACK</p><h2>Help improve the experience</h2><form id="feedback-form"><label>Rating<select name="rating" required><option value="5">5 — excellent</option><option value="4">4 — useful</option><option value="3">3 — okay</option><option value="2">2 — needs work</option><option value="1">1 — poor</option></select></label><label>Comment<textarea name="comment" maxlength="2000" placeholder="What helped—or what was missing?"></textarea></label><button>Send feedback</button><span id="feedback-state"></span></form></section>
+</main><script src="{{ url_for('static', filename='app.js') }}"></script></body></html>

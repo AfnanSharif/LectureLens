@@ -1,0 +1,4 @@
+const quiz=document.querySelector('#quiz-form');
+if(quiz){quiz.addEventListener('submit',async(event)=>{event.preventDefault();const response=await fetch('/grade',{method:'POST',body:new FormData(quiz)});const data=await response.json();document.querySelector('#score').textContent=`${data.score}/${data.total} · ${data.percent}%`;for(const item of data.details){const node=document.querySelector(`#ex-${item.id}`);node.textContent=`${item.correct?'✓ Correct':'Review'} — ${item.explanation}`;node.style.color=item.correct?'#c8ff3d':'#fca5a5';}})}
+const feedback=document.querySelector('#feedback-form');
+if(feedback){feedback.addEventListener('submit',async(event)=>{event.preventDefault();const response=await fetch('/feedback',{method:'POST',body:new FormData(feedback)});const data=await response.json();document.querySelector('#feedback-state').textContent=data.ok?'Thank you — feedback saved.':data.error;})}

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LectureLens · Video Learning Studio</title><link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}"></head>
+<body><main>
+  <section class="hero"><nav><span class="logo">LECTURE<span>LENS</span></span><span class="pill">LOCAL-FIRST LEARNING AI</span></nav>
+    <div class="hero-grid"><div><p class="eyebrow">WATCH LESS. RETAIN MORE.</p><h1>Transform any lesson into a focused study session.</h1><p class="lede">Upload a transcript—or enable local Whisper for video—and receive a faithful brief, smart notes, and an evidence-backed quiz.</p></div>
+      <div class="orb"><span>{{ stats.count }}</span><small>learner ratings<br>avg {{ stats.average_rating }}/5</small></div></div>
+  </section>
+  <section class="card upload-card"><div><p class="step">01 · SOURCE</p><h2>Build your learning pack</h2><p class="subtle">TXT, SRT, VTT, and JSON work immediately. Media requires the optional local Whisper dependency.</p></div>
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+    <form action="/analyze" method="post" enctype="multipart/form-data">
+      <label>Lesson title<input name="title" placeholder="e.g. Linear Regression Foundations"></label>
+      <label class="drop">Choose transcript or media<input type="file" name="file" accept=".txt,.srt,.vtt,.json,.mp3,.wav,.m4a,.mp4,.mov" required></label>
+      <label>Summary engine<select name="provider"><option value="local" {% if summary_provider != 'mixtral' %}selected{% endif %}>Local extractive</option><option value="mixtral" {% if summary_provider == 'mixtral' %}selected{% endif %}>Mixtral endpoint</option></select></label>
+      <label>Quiz size<input type="range" name="questions" min="1" max="10" value="5" oninput="this.nextElementSibling.value=this.value"><output>5</output></label>
+      <button>Generate learning pack <span>→</span></button>
+    </form>
+  </section>
+  <section class="feature-grid"><article><b>Faithful summary</b><p>Extracted from the source—no fabricated facts.</p></article><article><b>Active recall</b><p>Every quiz answer includes transcript evidence.</p></article><article><b>Feedback loop</b><p>Ratings and optional scores persist to SQLite.</p></article></section>
+</main></body></html>
